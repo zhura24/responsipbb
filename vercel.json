@@ -1,7 +1,9 @@
 {
-  "functions": {
-    "src/index.js": {
-      "runtime": "nodejs18.x"
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index"
     }
-  }
+  ]
 }
