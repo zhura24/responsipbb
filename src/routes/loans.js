@@ -9,14 +9,24 @@ function handleError(res, error) {
   return res.status(500).json({ error: error.message || 'Internal server error' });
 }
 
+// Check middleware for Supabase client availability
+router.use((req, res, next) => {
+  if (!supabase) {
+    return res.status(500).json({ 
+      error: 'Supabase client is not initialized. Please check SUPABASE_URL and SUPABASE_ANON_KEY environment variables.' 
+    });
+  }
+  next();
+});
+
 // Create a new loan
 router.post('/', async (req, res) => {
   const { member_id, book_id, borrowed_at, due_at, status } = req.body;
   const { data, error } = await supabase.from('loans').insert([
     { member_id, book_id, borrowed_at, due_at, status }
-  ]);
+  ]).select();
   if (error) return handleError(res, error);
-  return res.status(201).json(data[0]);
+  return res.status(201).json(data ? data[0] : {});
 });
 
 // Get all loans, optional filter by status
@@ -43,7 +53,7 @@ router.put('/:id', async (req, res) => {
   const updates = req.body; // allow partial updates
   const { data, error } = await supabase.from('loans').update(updates).eq('id', id).select();
   if (error) return handleError(res, error);
-  return res.json(data[0]);
+  return res.json(data ? data[0] : {});
 });
 
 // Delete a loan by id
@@ -51,7 +61,7 @@ router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   const { data, error } = await supabase.from('loans').delete().eq('id', id).select();
   if (error) return handleError(res, error);
-  return res.json({ message: 'Loan deleted', deleted: data[0] });
+  return res.json({ message: 'Loan deleted', deleted: data ? data[0] : null });
 });
 
 module.exports = router;
