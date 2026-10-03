@@ -14,7 +14,7 @@ Aplikasi **RESTful API** sederhana untuk mengelola data peminjaman buku oleh ang
 | `returned_at` | timestamp (nullable) | Waktu buku dikembalikan |
 | `status` | text | `Aktif`, `Terlambat`, atau `Selesai` |
 
-> **Catatan**: Skema tabel `loans` harus dibuat di Supabase terlebih dahulu (SQL contoh di bawah).
+> **Catatan**: Skema tabel `loans` harus dibuat di Supabase terlebih dahulu.
 
 ```sql
 create table loans (
@@ -31,7 +31,7 @@ create table loans (
 ## Contoh Request & Response
 ### Create (POST /loans)
 ```bash
-curl -X POST https://<your-vercel-url>/loans \
+curl -X POST https://responsipbb-x72e.vercel.app/loans \
   -H "Content-Type: application/json" \
   -d '{"member_id":1,"book_id":42,"borrowed_at":"2026-10-01T08:00:00Z","due_at":"2026-10-15T08:00:00Z","status":"Aktif"}'
 ```
@@ -50,37 +50,57 @@ curl -X POST https://<your-vercel-url>/loans \
 
 ### Read All (GET /loans)
 ```bash
-curl https://<your-vercel-url>/loans
+curl https://responsipbb-x72e.vercel.app/loans
 ```
 **Response** (200)
 ```json
-[ { ... }, { ... } ]
+[
+  {
+    "id": 1,
+    "member_id": 1,
+    "book_id": 42,
+    "borrowed_at": "2026-10-01T08:00:00.000Z",
+    "due_at": "2026-10-15T08:00:00.000Z",
+    "returned_at": null,
+    "status": "Aktif"
+  }
+]
 ```
 
 ### Filter by Status (GET /loans?status=Terlambat)
 ```bash
-curl "https://<your-vercel-url>/loans?status=Terlambat"
+curl "https://responsipbb-x72e.vercel.app/loans?status=Terlambat"
 ```
 **Response** (200)
 ```json
-[ { "id": 3, "status": "Terlambat", ... } ]
+[
+  {
+    "id": 3,
+    "member_id": 2,
+    "book_id": 15,
+    "borrowed_at": "2026-09-01T08:00:00.000Z",
+    "due_at": "2026-09-15T08:00:00.000Z",
+    "returned_at": null,
+    "status": "Terlambat"
+  }
+]
 ```
 
 ### Get By ID (GET /loans/:id)
 ```bash
-curl https://<your-vercel-url>/loans/1
+curl https://responsipbb-x72e.vercel.app/loans/1
 ```
 
 ### Update (PUT /loans/:id)
 ```bash
-curl -X PUT https://<your-vercel-url>/loans/1 \
+curl -X PUT https://responsipbb-x72e.vercel.app/loans/1 \
   -H "Content-Type: application/json" \
   -d '{"status":"Selesai","returned_at":"2026-10-12T10:30:00Z"}'
 ```
 
 ### Delete (DELETE /loans/:id)
 ```bash
-curl -X DELETE https://<your-vercel-url>/loans/1
+curl -X DELETE https://responsipbb-x72e.vercel.app/loans/1
 ```
 
 ## Panduan Instalasi & Menjalankan Lokal
@@ -100,19 +120,6 @@ cp .env.example .env
 npm run dev   # akan mendengarkan pada http://localhost:3000
 ```
 
-## Deploy ke Vercel
-1. Pastikan repository sudah **push** ke GitHub (`git push origin main`).
-2. Buka https://vercel.com dan pilih **Import Project** → **Import Git Repository** → pilih `zhura24/responsipbb`.
-3. Pada layar *Environment Variables*, tambahkan:
-   - `SUPABASE_URL` → URL Supabase Anda
-   - `SUPABASE_ANON_KEY` → Anon Key Supabase Anda
-   - `PORT` (opsional, default 3000)
-4. Deploy selesai, Vercel akan memberikan **Base URL** (contoh: `https://responsipbb.vercel.app`).
-5. Uji endpoint menggunakan curl atau Postman pada URL tersebut.
-
-## Link Hasil
-- **Repository GitHub**: https://github.com/zhura24/responsipbb
-- **Base URL Vercel**: *silakan isi setelah deployment* (contoh: `https://responsipbb.vercel.app`)
-
----
-*Jika ada hal yang belum jelas atau ingin menambah fitur lain, beri tahu saya!*
+## Link Output Pengumpulan
+- **Link Repository GitHub**: [https://github.com/zhura24/responsipbb](https://github.com/zhura24/responsipbb)
+- **Link Base URL Deployment Vercel**: [https://responsipbb-x72e.vercel.app](https://responsipbb-x72e.vercel.app)
